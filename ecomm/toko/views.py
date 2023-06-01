@@ -212,3 +212,19 @@ def paypal_return(request):
 def paypal_cancel(request):
     messages.error(request, 'Pembayaran dibatalkan')
     return redirect('toko:order-summary')
+
+
+#SortirKategori
+def produkItem_list(request):
+    category = request.GET.get('kategori','')
+    products = ProdukItem.objects.all()
+    if category:
+        products = products.filter(kategori = category)
+
+    sorted_product = products.order_by('nama_produk')
+    context = {
+        'products' : sorted_product,
+        'selected_category' : category,
+    }
+
+    return render(request, 'home.html', context)
